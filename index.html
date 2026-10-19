@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KINDIYA KINGS - Live Cricket Score</title>
+<style>
+body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif;text-align:center}
+header{background:#162b25;padding:24px 10px;border-bottom:3px solid #e9b949}
+h1{color:#f5c451;font-size:27px}
+.card{background:#1d293b;margin:18px 12px;padding:20px;border-radius:16px}
+input,button{padding:12px;margin:5px;border-radius:9px;border:0;font-size:16px}
+input{width:80%;max-width:300px}
+button{background:#e9b949;color:#142016;font-weight:bold}
+.score{font-size:48px;font-weight:bold;margin:15px}
+.small{color:#bdc8d8}
+</style>
+</head>
+<body>
+<header>
+<h1>👑 KINDIYA KINGS 🏏</h1>
+<p>YOUR VILLAGE • YOUR TEAM • YOUR PRIDE</p>
+</header>
+
+<div class="card">
+<h2>🏏 LIVE CRICKET SCORE</h2>
+<input id="opponent" placeholder="दूसरी टीम का नाम">
+<br>
+<button onclick="startMatch()">नया मैच शुरू करें</button>
+<p id="status">⚪ मैच शुरू नहीं हुआ</p>
+</div>
+
+<div class="card">
+<h2 id="teams">KINDIYA KINGS</h2>
+<div class="score" id="score">0/0</div>
+<p id="overs">ओवर: 0.0</p>
+<p class="small">रन • विकेट • ओवर</p>
+</div>
+
+<div class="card">
+<h3>⚡ स्कोर अपडेट करें</h3>
+<button onclick="addRuns(0)">0</button>
+<button onclick="addRuns(1)">1</button>
+<button onclick="addRuns(2)">2</button>
+<button onclick="addRuns(3)">3</button>
+<button onclick="addRuns(4)">4</button>
+<button onclick="addRuns(6)">6</button>
+<br>
+<button onclick="addWicket()">❌ विकेट</button>
+<button onclick="undo()">↩️ वापस</button>
+<br>
+<button onclick="endMatch()">🏁 मैच समाप्त</button>
+</div>
+
+<p class="small">KINDIYA KINGS • Cricket Team</p>
+
+<script>
+let runs=0,wickets=0,balls=0,started=false,history=[];
+function render(){
+ document.getElementById('score').textContent=runs+'/'+wickets;
+ document.getElementById('overs').textContent='ओवर: '+Math.floor(balls/6)+'.'+balls%6;
+}
+function startMatch(){
+ if(started && !confirm('पुराना स्कोर हटाकर नया मैच शुरू करें?'))return;
+ runs=0;wickets=0;balls=0;history=[];started=true;
+ document.getElementById('teams').textContent='KINDIYA KINGS vs '+(document.getElementById('opponent').value.trim()||'दूसरी टीम');
+ document.getElementById('status').textContent='🔴 LIVE MATCH';
+ render();
+}
+function save(){history.push([runs,wickets,balls]);}
+function addRuns(n){
+ if(!started){alert('पहले नया मैच शुरू करें');return}
+ if(wickets>=10)return;
+ save();runs+=n;balls++;render();
+}
+function addWicket(){
+ if(!started){alert('पहले नया मैच शुरू करें');return}
+ if(wickets>=10)return;
+ save();wickets++;balls++;render();
+}
+function undo(){
+ if(!history.length)return;
+ [runs,wickets,balls]=history.pop();render();
+}
+function endMatch(){
+ if(!started)return;
+ started=false;
+ document.getElementById('status').textContent='🏁 MATCH ENDED';
+}
+</script>
+</body>
+</html>
